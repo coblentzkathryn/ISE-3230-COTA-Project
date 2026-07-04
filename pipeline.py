@@ -40,6 +40,7 @@ GTFS_URL = "https://www.cota.com/data/cota.gtfs.zip"
 TIGER_TRACTS_URL = "https://www2.census.gov/geo/tiger/TIGER2023/TRACT/tl_2023_39_tract.zip"
 CENSUS_API = "https://api.census.gov/data/2023/acs/acs5"
 ACS_VARIABLE = "B01003_001E"  # population
+CENSUS_API_KEY = "bcf2b0b67e15fffe94d450425cb2b4da005ea1ef"  # replace with your own key if needed
 FRANKLIN_FIPS = ("39","049")
 
 
@@ -87,7 +88,8 @@ def query_acs_population(state, county, variable):
     params = {
         "get": f"NAME,{variable}",
         "for": "tract:*",
-        "in": f"state:{state} county:{county}"
+        "in": f"state:{state} county:{county}",
+        "key": CENSUS_API_KEY
     }
     resp = requests.get(CENSUS_API, params=params)
     resp.raise_for_status()
@@ -356,7 +358,7 @@ def create_postoptimal_maps(stops, tracts, candidates, demand, out_dir):
                               color=color, fill=False, opacity=0.4).add_to(m)
 
 
-        # Output filename
+        # Output filename; change for your own naming convention if desired
         safe_d = str(dmax).replace(".", "")
         safe_eq = str(eq).replace(".", "")
         fname = f"post_map_s{scenario_number}_d{safe_d}_n{pmax}_eq{safe_eq}.html"
